@@ -1,0 +1,16 @@
+{
+  "name": "project",
+  "version": "1.0.0",
+  "description": "1. 타입스크립트 기본환경 구성\r    - NPM 초기화\r    - 타입스크립트 라이브러리 설치\r    - 타입스크립트 설정 파일 생성 및 기본 값 추가",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^4.9.4"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "allowJs": true, //js 허용 여부
+    "target": "ES5", //tsc 실행시 컴파일되는 js 버전
+    "outDir": "./built", //결과물 들어갈 경로
+    "moduleResolution": "Node" //프로미스 코드 인식시키기위해 Node 선택
+  },
+  "include": ["./src/**/*"] // src폴더 안의 모든 파일을 포함
+}
