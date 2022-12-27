@@ -5,10 +5,14 @@
 0. JSDoc으로 타입시스템 적용해보기
 
 1. 타입스크립트 기본환경 구성
-   - [x] NPM 초기화 : npm init
-   - [x] 타입스크립트 라이브러리 설치 : npm i typescript --save-dev
-   - [x] 타입스크립트 설정 파일 생성 및 기본 값 추가 : tsconfig.json 생성
+   - [x] NPM 초기화 : `npm init`
+   - [x] 타입스크립트 라이브러리 설치 : `npm i typescript --save-dev`
+   - [x] 타입스크립트 설정 파일 생성 및 기본 값 추가 : `tsconfig.json` 생성
    - [x] 자바스트립트 파일을 타입스크립트 파일로 변환
+   * 별도의 빌드시스템이 적용된 경우 위의 환경구성 이후 소스코드만 옮겨와서 변환하기를 추천
+2. 명시적인 `any` 선언하기(비숙련자)
+   - `tsconfig.json` 에 `noImplicitAny` : `true`
+   - 표시되는 에러에 any 타입 일단 넣기
 
 ## 참고 자료
 

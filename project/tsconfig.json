@@ -4,7 +4,9 @@
     "target": "ES5", //tsc 실행시 컴파일되는 js 버전
     "outDir": "./built", //결과물 들어갈 경로
     "moduleResolution": "Node", //프로미스 코드 인식시키기위해 Node 선택
-    "lib": ["ES2015", "DOM", "DOM.Iterable"] //async 코드를 ES5 에서 인식시킬 수 있는 라이브러리
+    "lib": ["ES2015", "DOM", "DOM.Iterable"], //async 코드를 ES5 에서 인식시킬 수 있는 라이브러리
+    "noImplicitAny": true // any타입으로 추론되는 암시적인 코드도 에러로 표시
   },
-  "include": ["./src/**/*"] // src폴더 안의 모든 파일을 포함
+  "include": ["./src/**/*"], // src폴더 안의 모든 파일을 포함
+  "exclude": ["node_modules", "dist"]
 }
