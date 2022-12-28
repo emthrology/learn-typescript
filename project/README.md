@@ -17,6 +17,8 @@
 3. 프로젝트 환경 구성
    - babel, eslint, prettrier etc.
 4. 외부 라이브러리 모듈화
+5. `strict` 옵션 추가 후 타입 정의
+   -
 
 ## 참고 자료
 

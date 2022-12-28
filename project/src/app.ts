@@ -30,9 +30,9 @@ const deathsTotal = $('.deaths') as HTMLParagraphElement;
 const recoveredTotal = $('.recovered') as HTMLParagraphElement; //HTMLParagraphElement는 Element(ts기본 내장 인터페이스)의 확장 인터페이스이고 'innerText' 프로퍼티를 명시하고있다
 const lastUpdatedTime = $('.last-updated-time') as HTMLParagraphElement; //클래스가 쓰이는 element의 종류에 따라 확장 인터페이스도 달라짐
 const lineChart = $('#lineChart') as HTMLCanvasElement;
-const rankList = $('.rank-list');
-const deathsList = $('.deaths-list');
-const recoveredList = $('.recovered-list');
+const rankList = $('.rank-list') as HTMLOListElement;
+const deathsList = $('.deaths-list') as HTMLOListElement;
+const recoveredList = $('.recovered-list') as HTMLOListElement;
 const deathSpinner = createSpinnerElement('deaths-spinner');
 const recoveredSpinner = createSpinnerElement('recovered-spinner');
 let casesChart: Chart;
@@ -76,7 +76,7 @@ enum CovidStatus {
 }
 
 function fetchCountryInfo(
-  countryName: string,
+  countryName: string | undefined,
   status: CovidStatus
 ): Promise<AxiosResponse<CountrySumarryResponse>> {
   // params: confirmed, recovered, deaths
@@ -92,17 +92,18 @@ function startApp() {
 
 // events
 function initEvents() {
+  if (!rankList) return;
   rankList.addEventListener('click', handleListClick);
 }
 
-async function handleListClick(event: MouseEvent) {
+async function handleListClick(event: Event) {
   let selectedId;
   if (casesChart !== undefined) casesChart.destroy();
   if (
     event.target instanceof HTMLParagraphElement ||
     event.target instanceof HTMLSpanElement
   ) {
-    selectedId = event.target.parentElement.id;
+    selectedId = event.target.parentElement?.id;
   }
   if (event.target instanceof HTMLLIElement) {
     selectedId = event.target.id;
@@ -150,12 +151,12 @@ function setDeathsList(data: CountrySumarryResponse) {
     p.textContent = new Date(value.Date).toLocaleDateString().slice(0, -1);
     li.appendChild(span);
     li.appendChild(p);
-    deathsList.appendChild(li);
+    deathsList!.appendChild(li); //타입 단언(type assertion) - non null 선언 : 디버깅에 방해가 될 수 있으므로 주의해서 적용해야 한다
   });
 }
 
 function clearDeathList() {
-  deathsList.innerHTML = null;
+  deathsList.innerHTML = '';
 }
 
 function setTotalDeathsByCountry(data: CountrySumarryResponse) {
@@ -177,12 +178,12 @@ function setRecoveredList(data: CountrySumarryResponse) {
     p.textContent = new Date(value.Date).toLocaleDateString().slice(0, -1);
     li.appendChild(span);
     li.appendChild(p);
-    recoveredList.appendChild(li);
+    recoveredList?.appendChild(li);
   });
 }
 
 function clearRecoveredList() {
-  recoveredList.innerHTML = null;
+  recoveredList.innerHTML = '';
 }
 
 function setTotalRecoveredByCountry(data: CountrySumarryResponse) {
@@ -222,7 +223,7 @@ function renderChart(data: number[], labels: string[]) {
   Chart.defaults.font.family = 'Exo 2';
 
   if (casesChart !== undefined) casesChart.destroy();
-  casesChart = new Chart(ctx, {
+  casesChart = new Chart(ctx!, {
     type: 'line',
     data: {
       labels,
