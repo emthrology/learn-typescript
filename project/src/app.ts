@@ -51,6 +51,14 @@ function createSpinnerElement(id: string) {
   wrapperDiv.appendChild(spinnerDiv);
   return wrapperDiv;
 }
+function createParagraphElement(id: string, message: string) {
+  const paragraphDiv = document.createElement('div');
+  paragraphDiv.setAttribute('id', id);
+  const paragraph = document.createElement('p');
+  paragraph.innerText = message;
+  paragraphDiv.appendChild(paragraph);
+  return paragraphDiv;
+}
 
 // state
 let isDeathLoading = false;
@@ -89,6 +97,7 @@ function initEvents() {
 
 async function handleListClick(event: MouseEvent) {
   let selectedId;
+  if (casesChart !== undefined) casesChart.destroy();
   if (
     event.target instanceof HTMLParagraphElement ||
     event.target instanceof HTMLSpanElement
@@ -192,11 +201,19 @@ function endLoadingAnimation() {
 
 async function setupData() {
   const { data } = await fetchCovidSummary();
-  setTotalConfirmedNumber(data);
-  setTotalDeathsByWorld(data);
-  setTotalRecoveredByWorld(data);
-  setCountryRanksByConfirmedCases(data);
-  setLastUpdatedTimestamp(data);
+  if (data.Countries !== undefined) {
+    setTotalConfirmedNumber(data);
+    setTotalDeathsByWorld(data);
+    setTotalRecoveredByWorld(data);
+    setCountryRanksByConfirmedCases(data);
+    setLastUpdatedTimestamp(data);
+  } else {
+    const paragraph = createParagraphElement(
+      'catching-in-progress',
+      data.Message
+    );
+    deathsList.appendChild(paragraph);
+  }
 }
 
 function renderChart(data: number[], labels: string[]) {
