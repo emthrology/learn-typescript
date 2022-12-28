@@ -7,10 +7,11 @@ function getUnixTimestamp(date: Date) {
 }
 
 // DOM
-const confirmedTotal = $('.confirmed-total');
-const deathsTotal = $('.deaths');
-const recoveredTotal = $('.recovered');
-const lastUpdatedTime = $('.last-updated-time');
+// `as` 로 `타입 단언` 해준다
+const confirmedTotal = $('.confirmed-total') as HTMLSpanElement;
+const deathsTotal = $('.deaths') as HTMLParagraphElement;
+const recoveredTotal = $('.recovered') as HTMLParagraphElement; //HTMLParagraphElement는 Element(ts기본 내장 인터페이스)의 확장 인터페이스이고 'innerText' 프로퍼티를 명시하고있다
+const lastUpdatedTime = $('.last-updated-time') as HTMLParagraphElement; //클래스가 쓰이는 element의 종류에 따라 확장 인터페이스도 달라짐
 const rankList = $('.rank-list');
 const deathsList = $('.deaths-list');
 const recoveredList = $('.recovered-list');
