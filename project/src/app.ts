@@ -15,8 +15,10 @@ import {
 } from './covid';
 
 // utils
-function $(selector: string) {
-  return document.querySelector(selector);
+function $<T extends HTMLElement>(selector: string) {
+  //$ 함수는 HTMLElement타입과 그 자손타입만 접근가능?
+  const element = document.querySelector(selector);
+  return element as T; //타입단언을 셀렉터 함수에서 미리 해놓고
 }
 function getUnixTimestamp(date: Date | string) {
   //대부분 api에서 date는 string 타입으로 보내므로
@@ -25,14 +27,25 @@ function getUnixTimestamp(date: Date | string) {
 
 // DOM
 // `as` 로 `타입 단언` 해준다
-const confirmedTotal = $('.confirmed-total') as HTMLSpanElement;
-const deathsTotal = $('.deaths') as HTMLParagraphElement;
-const recoveredTotal = $('.recovered') as HTMLParagraphElement; //HTMLParagraphElement는 Element(ts기본 내장 인터페이스)의 확장 인터페이스이고 'innerText' 프로퍼티를 명시하고있다
-const lastUpdatedTime = $('.last-updated-time') as HTMLParagraphElement; //클래스가 쓰이는 element의 종류에 따라 확장 인터페이스도 달라짐
-const lineChart = $('#lineChart') as HTMLCanvasElement;
-const rankList = $('.rank-list') as HTMLOListElement;
-const deathsList = $('.deaths-list') as HTMLOListElement;
-const recoveredList = $('.recovered-list') as HTMLOListElement;
+// const confirmedTotal = $('.confirmed-total') as HTMLSpanElement;
+// const deathsTotal = $('.deaths') as HTMLParagraphElement;
+// const recoveredTotal = $('.recovered') as HTMLParagraphElement; //HTMLParagraphElement는 Element(ts기본 내장 인터페이스)의 확장 인터페이스이고 'innerText' 프로퍼티를 명시하고있다
+// const lastUpdatedTime = $('.last-updated-time') as HTMLParagraphElement; //클래스가 쓰이는 element의 종류에 따라 확장 인터페이스도 달라짐
+// const lineChart = $('#lineChart') as HTMLCanvasElement;
+// const rankList = $('.rank-list') as HTMLOListElement;
+// const deathsList = $('.deaths-list') as HTMLOListElement;
+// const recoveredList = $('.recovered-list') as HTMLOListElement;
+// const deathSpinner = createSpinnerElement('deaths-spinner');
+// const recoveredSpinner = createSpinnerElement('recovered-spinner');
+
+const confirmedTotal = $<HTMLSpanElement>('.confirmed-total');
+const deathsTotal = $<HTMLParagraphElement>('.deaths');
+const recoveredTotal = $<HTMLParagraphElement>('.recovered');
+const lastUpdatedTime = $<HTMLParagraphElement>('.last-updated-time');
+const lineChart = $<HTMLCanvasElement>('#lineChart');
+const rankList = $<HTMLOListElement>('.rank-list');
+const deathsList = $<HTMLOListElement>('.deaths-list');
+const recoveredList = $<HTMLOListElement>('.recovered-list');
 const deathSpinner = createSpinnerElement('deaths-spinner');
 const recoveredSpinner = createSpinnerElement('recovered-spinner');
 let casesChart: Chart;
@@ -151,7 +164,7 @@ function setDeathsList(data: CountrySumarryResponse) {
     p.textContent = new Date(value.Date).toLocaleDateString().slice(0, -1);
     li.appendChild(span);
     li.appendChild(p);
-    deathsList!.appendChild(li); //타입 단언(type assertion) - non null 선언 : 디버깅에 방해가 될 수 있으므로 주의해서 적용해야 한다
+    deathsList.appendChild(li); //타입 단언(type assertion) - non null 선언 : 디버깅에 방해가 될 수 있으므로 주의해서 적용해야 한다
   });
 }
 
@@ -223,21 +236,23 @@ function renderChart(data: number[], labels: string[]) {
   Chart.defaults.font.family = 'Exo 2';
 
   if (casesChart !== undefined) casesChart.destroy();
-  casesChart = new Chart(ctx!, {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [
-        {
-          label: 'Confirmed for the last two weeks',
-          backgroundColor: '#feb72b',
-          borderColor: '#feb72b',
-          data,
-        },
-      ],
-    },
-    options: {},
-  });
+  if (ctx !== null) {
+    casesChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Confirmed for the last two weeks',
+            backgroundColor: '#feb72b',
+            borderColor: '#feb72b',
+            data,
+          },
+        ],
+      },
+      options: {},
+    });
+  }
 }
 
 function setChartData(data: CountrySumarryResponse) {
