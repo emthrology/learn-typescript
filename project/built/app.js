@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,6 +35,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+Object.defineProperty(exports, "__esModule", { value: true });
+// //라이브러리 로딩
+// import 변수명 from '라이브러리 이름'
+// //변수, 함수 임포트
+// import {} from '파일 상대 경로'
+var axios_1 = require("axios"); //타입 정의가 필요없는 라이브러리
+var chart_js_1 = require("chart.js"); //타입 정의가 필요했던 라이브러리
+// -> 타입 정의가 없는 라이브러리의 경우 tsconfig에 "typeRoots" 에 경로 추가 후 라이브러리이름의 폴더 별로 index.d.ts 추가
+// import * as Chart from 'chart.js'; //CommonJS 모듈로부터 불러올 경우 쓰이는 양식
 // utils
 function $(selector) {
     return document.querySelector(selector);
@@ -42,10 +52,12 @@ function getUnixTimestamp(date) {
     return new Date(date).getTime();
 }
 // DOM
+// `as` 로 `타입 단언` 해준다
 var confirmedTotal = $('.confirmed-total');
 var deathsTotal = $('.deaths');
-var recoveredTotal = $('.recovered');
-var lastUpdatedTime = $('.last-updated-time');
+var recoveredTotal = $('.recovered'); //HTMLParagraphElement는 Element(ts기본 내장 인터페이스)의 확장 인터페이스이고 'innerText' 프로퍼티를 명시하고있다
+var lastUpdatedTime = $('.last-updated-time'); //클래스가 쓰이는 element의 종류에 따라 확장 인터페이스도 달라짐
+var lineChart = $('#lineChart');
 var rankList = $('.rank-list');
 var deathsList = $('.deaths-list');
 var recoveredList = $('.recovered-list');
@@ -68,12 +80,18 @@ var isRecoveredLoading = false;
 // api
 function fetchCovidSummary() {
     var url = 'https://api.covid19api.com/summary';
-    return axios.get(url);
+    return axios_1.default.get(url);
 }
+var CovidStatus;
+(function (CovidStatus) {
+    CovidStatus["Confirmed"] = "confirmed";
+    CovidStatus["Recovered"] = "recovered";
+    CovidStatus["Deaths"] = "deaths";
+})(CovidStatus || (CovidStatus = {}));
 function fetchCountryInfo(countryCode, status) {
     // params: confirmed, recovered, deaths
     var url = "https://api.covid19api.com/country/".concat(countryCode, "/status/").concat(status);
-    return axios.get(url);
+    return axios_1.default.get(url);
 }
 // methods
 function startApp() {
@@ -104,13 +122,13 @@ function handleListClick(event) {
                     clearRecoveredList();
                     startLoadingAnimation();
                     isDeathLoading = true;
-                    return [4 /*yield*/, fetchCountryInfo(selectedId, 'deaths')];
+                    return [4 /*yield*/, fetchCountryInfo(selectedId, CovidStatus.Deaths)];
                 case 1:
                     deathResponse = (_a.sent()).data;
-                    return [4 /*yield*/, fetchCountryInfo(selectedId, 'recovered')];
+                    return [4 /*yield*/, fetchCountryInfo(selectedId, CovidStatus.Recovered)];
                 case 2:
                     recoveredResponse = (_a.sent()).data;
-                    return [4 /*yield*/, fetchCountryInfo(selectedId, 'confirmed')];
+                    return [4 /*yield*/, fetchCountryInfo(selectedId, CovidStatus.Confirmed)];
                 case 3:
                     confirmedResponse = (_a.sent()).data;
                     endLoadingAnimation();
@@ -194,10 +212,10 @@ function setupData() {
     });
 }
 function renderChart(data, labels) {
-    var ctx = $('#lineChart').getContext('2d');
-    Chart.defaults.color = '#f5eaea';
-    Chart.defaults.font.family = 'Exo 2';
-    new Chart(ctx, {
+    var ctx = lineChart.getContext('2d');
+    chart_js_1.Chart.defaults.color = '#f5eaea';
+    chart_js_1.Chart.defaults.font.family = 'Exo 2';
+    new chart_js_1.Chart(ctx, {
         type: 'line',
         data: {
             labels: labels,

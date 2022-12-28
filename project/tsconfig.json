@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "module":"ES2020",
     "allowJs": true, //js 허용 여부
     "target": "ES5", //tsc 실행시 컴파일되는 js 버전
     "outDir": "./built", //결과물 들어갈 경로
