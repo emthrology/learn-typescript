@@ -5,7 +5,8 @@
     "outDir": "./built", //결과물 들어갈 경로
     "moduleResolution": "Node", //프로미스 코드 인식시키기위해 Node 선택
     "lib": ["ES2015", "DOM", "DOM.Iterable"], //async 코드를 ES5 에서 인식시킬 수 있는 라이브러리
-    "noImplicitAny": true // any타입으로 추론되는 암시적인 코드도 에러로 표시
+    "noImplicitAny": true, // any타입으로 추론되는 암시적인 코드도 에러로 표시
+    "typeRoots": ["./node_modules/@types"] //`./node_modules/@types` 가 default 이므로 기본적으로는 생성하지 않아도 되는 항목이지만 타입정의가 없는 라이브러리의 경우 여기에 추가경로를 통해 라이브러리(폴더)별 index.d.ts를 추가 할 수 있다.
   },
   "include": ["./src/**/*"], // src폴더 안의 모든 파일을 포함
   "exclude": ["node_modules", "dist"]

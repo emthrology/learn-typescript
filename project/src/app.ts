@@ -1,3 +1,12 @@
+// //라이브러리 로딩
+// import 변수명 from '라이브러리 이름'
+// //변수, 함수 임포트
+// import {} from '파일 상대 경로'
+import axios from 'axios'; //타입 정의가 필요없는 라이브러리
+import { Chart } from 'chart.js'; //타입 정의가 필요했던 라이브러리
+// -> 타입 정의가 없는 라이브러리의 경우 tsconfig에 "typeRoots" 에 경로 추가 후 라이브러리이름의 폴더 별로 index.d.ts 추가
+// import * as Chart from 'chart.js'; //CommonJS 모듈로부터 불러올 경우 쓰이는 양식
+
 // utils
 function $(selector: string) {
   return document.querySelector(selector);
@@ -12,6 +21,7 @@ const confirmedTotal = $('.confirmed-total') as HTMLSpanElement;
 const deathsTotal = $('.deaths') as HTMLParagraphElement;
 const recoveredTotal = $('.recovered') as HTMLParagraphElement; //HTMLParagraphElement는 Element(ts기본 내장 인터페이스)의 확장 인터페이스이고 'innerText' 프로퍼티를 명시하고있다
 const lastUpdatedTime = $('.last-updated-time') as HTMLParagraphElement; //클래스가 쓰이는 element의 종류에 따라 확장 인터페이스도 달라짐
+const lineChart = $('#lineChart') as HTMLCanvasElement;
 const rankList = $('.rank-list');
 const deathsList = $('.deaths-list');
 const recoveredList = $('.recovered-list');
@@ -177,7 +187,7 @@ async function setupData() {
 }
 
 function renderChart(data: any, labels: any) {
-  const ctx = $('#lineChart').getContext('2d');
+  const ctx = lineChart.getContext('2d');
   Chart.defaults.color = '#f5eaea';
   Chart.defaults.font.family = 'Exo 2';
   new Chart(ctx, {

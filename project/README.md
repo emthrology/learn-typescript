@@ -13,6 +13,10 @@
 2. 명시적인 `any` 선언하기(비숙련자)
    - `tsconfig.json` 에 `noImplicitAny` : `true`
    - 표시되는 에러에 any 타입 일단 넣기
+   - 타입 구체화 작업 진행 : 가능한 한 구체적인 타입으로
+3. 프로젝트 환경 구성
+   - babel, eslint, prettrier etc.
+4. 외부 라이브러리 모듈화
 
 ## 참고 자료
 
